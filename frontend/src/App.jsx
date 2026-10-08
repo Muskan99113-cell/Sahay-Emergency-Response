@@ -19,7 +19,7 @@ import ResponderDashboard from "./components/ResponderDashboard";
 import HospitalDashboard from "./HospitalDashboard";
 import AuthorityDashboard from "./AuthorityDashboard";
 
-const API_BASE = "";
+const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
 
 const emergencyTypes = [
   "Medical",
@@ -1076,4 +1076,6 @@ export default function App() {
     />
   );
 }
+
+
 

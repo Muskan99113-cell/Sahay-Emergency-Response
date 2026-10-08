@@ -15,7 +15,7 @@ import {
 
 import LiveMap from "./components/LiveMap";
 
-const API_BASE = "";
+const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
 
 const severityStyles = {
   critical: "bg-red-50 text-red-700 border-red-200",
@@ -528,4 +528,6 @@ export default function AuthorityDashboard() {
     </div>
   );
 }
+
+
 

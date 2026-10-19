@@ -6,3 +6,5 @@ pydantic-settings==2.15.0
 python-dotenv==1.2.4
 psycopg[binary]==3.2.10
 PyJWT
+
+pwdlib[argon2]

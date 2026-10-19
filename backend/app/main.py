@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,15 +7,14 @@ from app.routers.responders import router as responders_router
 from app.routers.hospitals import router as hospitals_router
 from app.routers.authority import router as authority_router
 from app.routers.ai import router as ai_router
-from app.routers.timeline import router as timeline_router
+from app.routers.auth import router as auth_router
 
 
 app = FastAPI(
-    title="SAHAY API",
-    description="Smart Emergency Response & Assistance API",
+    title="SAHAY Emergency Response API",
+    description="Emergency coordination and authentication API",
     version="1.0.0",
 )
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,28 +28,14 @@ app.add_middleware(
 )
 
 
-# SAHAY API Routers
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "SAHAY API"}
+
+
 app.include_router(incidents_router)
 app.include_router(responders_router)
 app.include_router(hospitals_router)
 app.include_router(authority_router)
 app.include_router(ai_router)
-app.include_router(timeline_router)
-
-
-@app.get("/")
-def root():
-    return {
-        "name": "SAHAY",
-        "message": "Smart Emergency Response & Assistance API",
-        "status": "online",
-        "version": "1.0.0",
-    }
-
-
-@app.get("/health")
-def health_check():
-    return {
-        "status": "healthy",
-        "service": "sahay-backend",
-    }
+app.include_router(auth_router)

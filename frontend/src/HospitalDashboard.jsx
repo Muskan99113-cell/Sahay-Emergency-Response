@@ -12,7 +12,7 @@ import {
   Users,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
+import { API_BASE } from "./lib/api";
 
 const severityStyles = {
   critical: "bg-red-50 text-red-700 border-red-200",
@@ -34,7 +34,7 @@ function formatStatus(status) {
 }
 
 function formatDate(value) {
-  if (!value) return "—";
+  if (!value) return "â€”";
 
   const date = new Date(value);
 
@@ -57,7 +57,7 @@ function StatCard({ icon: Icon, label, value, description }) {
         <div>
           <p className="text-sm font-medium text-slate-500">{label}</p>
           <p className="mt-2 text-3xl font-bold text-slate-900">{value}</p>
-          <p className="mt-1 text-xs text-slate-400">{description}</p>
+          <p className="mt-1 text-xs text-slate-600">{description}</p>
         </div>
 
         <div className="rounded-xl bg-slate-100 p-3 text-slate-700">
@@ -119,7 +119,7 @@ function Workflow({ status }) {
                   className={`flex h-8 w-8 items-center justify-center rounded-full border-2 ${
                     completed
                       ? "border-slate-900 bg-slate-900 text-white"
-                      : "border-slate-200 bg-white text-slate-400"
+                      : "border-slate-200 bg-white text-slate-600"
                   }`}
                 >
                   {completed ? (
@@ -131,7 +131,7 @@ function Workflow({ status }) {
 
                 <span
                   className={`mt-2 text-[11px] font-semibold ${
-                    completed ? "text-slate-800" : "text-slate-400"
+                    completed ? "text-slate-800" : "text-slate-600"
                   }`}
                 >
                   {step.label}
@@ -170,7 +170,12 @@ export default function HospitalDashboard() {
 
       setError("");
 
-      const response = await fetch(`${API_BASE}/api/hospitals/incidents`);
+      const response = await fetch(
+  `${API_BASE}/api/hospitals/incidents`,
+  {
+    credentials: "include",
+  }
+);
 
       if (!response.ok) {
         throw new Error("Unable to load hospital emergencies.");
@@ -288,10 +293,10 @@ export default function HospitalDashboard() {
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-6 rounded-3xl bg-slate-950 p-6 text-white shadow-xl">
+        <div className="mb-6 rounded-3xl border border-pink-100 bg-gradient-to-r from-pink-50 via-purple-50 to-emerald-50 p-6 text-slate-800 shadow-sm">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
             <div>
-              <div className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-300">
+              <div className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
                 <Hospital size={17} />
                 SAHAY Hospital Command
               </div>
@@ -300,7 +305,7 @@ export default function HospitalDashboard() {
                 Emergency Reception Dashboard
               </h1>
 
-              <p className="mt-2 max-w-2xl text-sm text-slate-300">
+              <p className="mt-2 max-w-2xl text-sm text-slate-600">
                 Monitor incoming emergencies, prepare clinical resources and
                 coordinate hospital readiness in real time.
               </p>
@@ -313,7 +318,7 @@ export default function HospitalDashboard() {
                   System Online
                 </div>
 
-                <p className="mt-1 text-slate-400">
+                <p className="mt-1 text-slate-600">
                   {lastUpdated
                     ? `Updated ${lastUpdated.toLocaleTimeString("en-IN", {
                         hour: "2-digit",
@@ -442,7 +447,7 @@ export default function HospitalDashboard() {
             </div>
           ) : filteredIncidents.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
-              <Hospital className="mx-auto text-slate-400" size={38} />
+              <Hospital className="mx-auto text-slate-600" size={38} />
               <p className="mt-4 font-semibold text-slate-800">
                 No matching emergencies
               </p>
@@ -480,19 +485,19 @@ export default function HospitalDashboard() {
 
                           <p className="mt-1 text-sm text-slate-500">
                             {incident.emergency_type?.toUpperCase() || "EMERGENCY"}{" "}
-                            • {formatDate(incident.created_at)}
+                            â€¢ {formatDate(incident.created_at)}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-2 text-sm font-bold text-red-700">
-                        Priority {incident.priority_score ?? "—"}
+                        Priority {incident.priority_score ?? "â€”"}
                       </div>
                     </div>
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-600">
                           Patient / Citizen
                         </p>
                         <p className="mt-1 font-semibold text-slate-800">
@@ -501,16 +506,16 @@ export default function HospitalDashboard() {
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-600">
                           AI Confidence
                         </p>
                         <p className="mt-1 font-semibold text-slate-800">
-                          {incident.ai_confidence ?? "—"}%
+                          {incident.ai_confidence ?? "â€”"}%
                         </p>
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-600">
                           Recommended Unit
                         </p>
                         <p className="mt-1 text-sm font-semibold text-slate-800">
@@ -519,7 +524,7 @@ export default function HospitalDashboard() {
                       </div>
 
                       <div className="rounded-2xl bg-slate-50 p-4">
-                        <p className="text-xs font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-600">
                           Location
                         </p>
                         <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-slate-800">
@@ -535,7 +540,7 @@ export default function HospitalDashboard() {
 
                     {incident.description && (
                       <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                           Emergency Description
                         </p>
                         <p className="mt-2 text-sm leading-6 text-slate-700">
@@ -634,6 +639,3 @@ export default function HospitalDashboard() {
     </div>
   );
 }
-
-
-

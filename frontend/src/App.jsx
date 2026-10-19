@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
+
 import {
   Activity,
   AlertTriangle,
@@ -12,14 +13,15 @@ import {
   RefreshCw,
   ShieldAlert,
   Siren,
-  UserRound,
 } from "lucide-react";
 
 import ResponderDashboard from "./components/ResponderDashboard";
 import HospitalDashboard from "./HospitalDashboard";
 import AuthorityDashboard from "./AuthorityDashboard";
+import AdminDashboard from "./AdminDashboard";
+import AuthPage from "./AuthPage";
 
-const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
+import { apiFetch } from "./lib/api";
 
 const emergencyTypes = [
   "Medical",
@@ -30,10 +32,17 @@ const emergencyTypes = [
 ];
 
 const severityStyles = {
-  critical: "bg-red-100 text-red-700 border-red-200",
-  high: "bg-orange-100 text-orange-700 border-orange-200",
-  medium: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  low: "bg-green-100 text-green-700 border-green-200",
+  critical:
+    "bg-red-100 text-red-700 border-red-200",
+
+  high:
+    "bg-orange-100 text-orange-700 border-orange-200",
+
+  medium:
+    "bg-yellow-100 text-yellow-700 border-yellow-200",
+
+  low:
+    "bg-green-100 text-green-700 border-green-200",
 };
 
 const timelineIcons = {
@@ -46,7 +55,9 @@ const timelineIcons = {
 };
 
 function formatTime(value) {
-  if (!value) return "Just now";
+  if (!value) {
+    return "Just now";
+  }
 
   const date = new Date(value);
 
@@ -67,22 +78,28 @@ function getCurrentLocation() {
         latitude: null,
         longitude: null,
       });
+
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude:
+            position.coords.latitude,
+
+          longitude:
+            position.coords.longitude,
         });
       },
+
       () => {
         resolve({
           latitude: null,
           longitude: null,
         });
       },
+
       {
         enableHighAccuracy: true,
         timeout: 10000,
@@ -92,35 +109,48 @@ function getCurrentLocation() {
   });
 }
 
-function InfoCard({ icon, label, value }) {
+function InfoCard({
+  icon,
+  label,
+  value,
+}) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+
       <div className="mb-2 flex items-center gap-2 text-slate-400">
+
         {icon}
 
         <span className="text-[10px] font-black uppercase tracking-wide">
           {label}
         </span>
+
       </div>
 
       <p className="break-words font-black text-slate-900">
         {value}
       </p>
+
     </div>
   );
 }
 
-function EmergencyTimeline({ timelineData }) {
+function EmergencyTimeline({
+  timelineData,
+}) {
   if (!timelineData) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
         <div className="flex items-center gap-3">
+
           <RefreshCw
             size={20}
             className="animate-spin text-slate-500"
           />
 
           <div>
+
             <h3 className="font-black text-slate-900">
               Emergency Response Timeline
             </h3>
@@ -128,21 +158,28 @@ function EmergencyTimeline({ timelineData }) {
             <p className="text-xs text-slate-500">
               Loading response progress...
             </p>
+
           </div>
+
         </div>
+
       </div>
     );
   }
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
       <div className="mb-6 flex items-start justify-between gap-4">
+
         <div className="flex items-center gap-3">
+
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
             <Clock3 size={20} />
           </div>
 
           <div>
+
             <h3 className="font-black text-slate-900">
               Emergency Response Timeline
             </h3>
@@ -150,219 +187,241 @@ function EmergencyTimeline({ timelineData }) {
             <p className="text-xs text-slate-500">
               Incident #{timelineData.incident_id}
             </p>
+
           </div>
+
         </div>
 
         <span className="rounded-lg bg-slate-100 px-3 py-2 text-xs font-black uppercase text-slate-600">
-          {timelineData.current_status?.replaceAll("_", " ")}
+          {timelineData.current_status?.replaceAll(
+            "_",
+            " "
+          )}
         </span>
+
       </div>
 
       <div className="space-y-1">
-        {timelineData.timeline?.map((item, index) => {
-          const Icon =
-            timelineIcons[item.status] || CheckCircle2;
 
-          const isLast =
-            index === timelineData.timeline.length - 1;
+        {timelineData.timeline?.map(
+          (item, index) => {
 
-          return (
-            <div
-              key={item.status}
-              className="relative flex gap-4"
-            >
-              {!isLast && (
-                <div
-                  className={`absolute left-5 top-11 h-8 w-0.5 ${
-                    item.completed
-                      ? "bg-green-400"
-                      : "bg-slate-200"
-                  }`}
-                />
-              )}
+            const Icon =
+              timelineIcons[
+                item.status
+              ] || CheckCircle2;
 
+            const isLast =
+              index ===
+              timelineData.timeline.length -
+                1;
+
+            return (
               <div
-                className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 ${
-                  item.current
-                    ? "border-red-500 bg-red-50 text-red-600"
-                    : item.completed
-                    ? "border-green-500 bg-green-50 text-green-600"
-                    : "border-slate-200 bg-slate-50 text-slate-400"
-                }`}
+                key={item.status}
+                className="relative flex gap-4"
               >
-                <Icon size={17} />
-              </div>
 
-              <div className="pb-5 pt-1">
-                <p
-                  className={`text-sm font-black ${
+                {!isLast && (
+                  <div
+                    className={`absolute left-5 top-11 h-8 w-0.5 ${
+                      item.completed
+                        ? "bg-green-400"
+                        : "bg-slate-200"
+                    }`}
+                  />
+                )}
+
+                <div
+                  className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 ${
                     item.current
-                      ? "text-red-700"
+                      ? "border-red-500 bg-red-50 text-red-600"
                       : item.completed
-                      ? "text-slate-800"
-                      : "text-slate-400"
+                        ? "border-green-500 bg-green-50 text-green-600"
+                        : "border-slate-200 bg-slate-50 text-slate-400"
                   }`}
                 >
-                  {item.title}
-                </p>
+                  <Icon size={17} />
+                </div>
 
-                <p className="mt-1 text-xs font-semibold text-slate-400">
-                  {item.current
-                    ? "Current response stage"
-                    : item.completed
-                    ? "Completed"
-                    : "Pending"}
-                </p>
+                <div className="pb-5 pt-1">
+
+                  <p
+                    className={`text-sm font-black ${
+                      item.current
+                        ? "text-red-700"
+                        : item.completed
+                          ? "text-slate-800"
+                          : "text-slate-400"
+                    }`}
+                  >
+                    {item.title}
+                  </p>
+
+                  <p className="mt-1 text-xs font-semibold text-slate-400">
+
+                    {item.current
+                      ? "Current response stage"
+                      : item.completed
+                        ? "Completed"
+                        : "Pending"}
+
+                  </p>
+
+                </div>
+
               </div>
-            </div>
-          );
-        })}
+            );
+          }
+        )}
+
       </div>
+
     </div>
   );
 }
 
-function RoleSwitcher({ role, setRole }) {
-  const roles = [
-    ["citizen", "Citizen"],
-    ["responder", "Responder"],
-    ["hospital", "Hospital"],
-    ["authority", "Authority"],
-  ];
+function CitizenDashboard() {
 
-  return (
-    <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 px-3 py-2 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2">
-        <div className="mr-2 hidden items-center gap-2 text-xs font-black uppercase tracking-wide text-slate-400 md:flex">
-          <UserRound size={14} />
-          Demo Role
-        </div>
+  const [
+    emergencyType,
+    setEmergencyType,
+  ] = useState("Medical");
 
-        {roles.map(([value, label]) => (
-          <button
-            key={value}
-            onClick={() => setRole(value)}
-            className={`rounded-lg px-3 py-2 text-xs font-black transition ${
-              role === value
-                ? "bg-slate-900 text-white"
-                : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
+  const [
+    description,
+    setDescription,
+  ] = useState("");
 
-function CitizenDashboard({ onRoleChange }) {
-  const [emergencyType, setEmergencyType] =
-    useState("Medical");
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
-  const [description, setDescription] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [location, setLocation] = useState({
+  const [
+    location,
+    setLocation,
+  ] = useState({
     latitude: null,
     longitude: null,
   });
 
-  const [incidents, setIncidents] =
-    useState([]);
+  const [
+    incidents,
+    setIncidents,
+  ] = useState([]);
 
-  const [activeIncident, setActiveIncident] =
-    useState(null);
+  const [
+    activeIncident,
+    setActiveIncident,
+  ] = useState(null);
 
-  const [selectedIncident, setSelectedIncident] =
-    useState(null);
+  const [
+    selectedIncident,
+    setSelectedIncident,
+  ] = useState(null);
 
-  const [timelineData, setTimelineData] =
-    useState(null);
+  const [
+    timelineData,
+    setTimelineData,
+  ] = useState(null);
 
-  const [message, setMessage] =
-    useState("");
+  const [
+    message,
+    setMessage,
+  ] = useState("");
 
-  const [messageType, setMessageType] =
-    useState("success");
+  const [
+    messageType,
+    setMessageType,
+  ] = useState("success");
 
-  const [locationLoading, setLocationLoading] =
-    useState(false);
+  const [
+    locationLoading,
+    setLocationLoading,
+  ] = useState(false);
 
-  async function fetchTimeline(incidentId) {
+  async function fetchTimeline(
+    incidentId
+  ) {
+
     if (!incidentId) {
       setTimelineData(null);
       return;
     }
 
     try {
-      const response = await fetch(
-        `${API_BASE}/api/incidents/${incidentId}/timeline`
+
+      const data = await apiFetch(
+        `/api/incidents/${incidentId}/timeline`
       );
 
-      if (!response.ok) {
-        throw new Error(
-          "Unable to load incident timeline."
-        );
-      }
-
-      const data = await response.json();
-
       setTimelineData(data);
+
     } catch (error) {
+
       console.error(
         "Timeline error:",
         error
       );
+
     }
   }
 
   async function fetchIncidents() {
+
     try {
-      const response = await fetch(
-        `${API_BASE}/api/incidents/`
-      );
 
-      if (!response.ok) {
-        throw new Error(
-          "Unable to load incidents."
+      const data =
+        await apiFetch(
+          "/api/incidents/"
         );
-      }
-
-      const data = await response.json();
 
       setIncidents(data);
 
-      const active = data.find(
-        (incident) =>
-          incident.status !== "completed"
-      );
+      const active =
+        data.find(
+          (incident) =>
+            incident.status !==
+            "completed"
+        );
 
       if (active) {
+
         setActiveIncident(active);
-        setSelectedIncident(active);
+
+        setSelectedIncident(
+          active
+        );
+
         fetchTimeline(active.id);
+
       } else {
+
         setActiveIncident(null);
+
       }
+
     } catch (error) {
+
       console.error(
         "Incident fetch error:",
         error
       );
+
     }
   }
 
   async function captureLocation() {
+
     setLocationLoading(true);
 
     const currentLocation =
       await getCurrentLocation();
 
-    setLocation(currentLocation);
+    setLocation(
+      currentLocation
+    );
 
     setLocationLoading(false);
 
@@ -370,9 +429,11 @@ function CitizenDashboard({ onRoleChange }) {
   }
 
   async function handleSOS(event) {
+
     event.preventDefault();
 
     if (!description.trim()) {
+
       setMessage(
         "Please describe the emergency before sending SOS."
       );
@@ -386,68 +447,72 @@ function CitizenDashboard({ onRoleChange }) {
     setMessage("");
 
     try {
-      let currentLocation = location;
+
+      let currentLocation =
+        location;
 
       if (
-        currentLocation.latitude === null ||
-        currentLocation.longitude === null
+        currentLocation.latitude ===
+          null ||
+        currentLocation.longitude ===
+          null
       ) {
+
         currentLocation =
           await captureLocation();
+
       }
 
-      const response = await fetch(
-        `${API_BASE}/api/incidents/`,
-        {
-          method: "POST",
+      const data =
+        await apiFetch(
+          "/api/incidents/",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+            body: JSON.stringify({
+              citizen_name:
+                "Muskan",
 
-          body: JSON.stringify({
-            citizen_name: "Muskan",
+              emergency_type:
+                emergencyType.toLowerCase(),
 
-            emergency_type:
-              emergencyType.toLowerCase(),
+              description:
+                description.trim(),
 
-            description:
-              description.trim(),
+              latitude:
+                currentLocation.latitude,
 
-            latitude:
-              currentLocation.latitude,
-
-            longitude:
-              currentLocation.longitude,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            "Unable to create emergency."
+              longitude:
+                currentLocation.longitude,
+            }),
+          }
         );
-      }
 
       setActiveIncident(data);
+
       setSelectedIncident(data);
 
       setMessage(
         `SOS #${data.id} created successfully. AI classified it as ${(
-          data.severity || "medium"
+          data.severity ||
+          "medium"
         ).toUpperCase()} priority.`
       );
 
-      setMessageType("success");
+      setMessageType(
+        "success"
+      );
 
       setDescription("");
 
-      await fetchTimeline(data.id);
+      await fetchTimeline(
+        data.id
+      );
+
       await fetchIncidents();
+
     } catch (error) {
+
       console.error(error);
 
       setMessage(
@@ -455,55 +520,80 @@ function CitizenDashboard({ onRoleChange }) {
           "Unable to create emergency."
       );
 
-      setMessageType("error");
+      setMessageType(
+        "error"
+      );
+
     } finally {
+
       setLoading(false);
+
     }
   }
 
   useEffect(() => {
+
     fetchIncidents();
 
-    const interval = setInterval(() => {
-      fetchIncidents();
-    }, 5000);
+    const interval =
+      setInterval(() => {
+        fetchIncidents();
+      }, 5000);
 
-    return () => clearInterval(interval);
+    return () =>
+      clearInterval(interval);
+
   }, []);
 
   useEffect(() => {
+
     if (!selectedIncident?.id) {
       return;
     }
 
-    fetchTimeline(selectedIncident.id);
+    fetchTimeline(
+      selectedIncident.id
+    );
 
-    const interval = setInterval(() => {
-      fetchTimeline(selectedIncident.id);
-    }, 5000);
+    const interval =
+      setInterval(() => {
+        fetchTimeline(
+          selectedIncident.id
+        );
+      }, 5000);
 
-    return () => clearInterval(interval);
+    return () =>
+      clearInterval(interval);
+
   }, [selectedIncident?.id]);
 
-  const recentIncidents = useMemo(() => {
-    return incidents.slice(0, 6);
-  }, [incidents]);
+  const recentIncidents =
+    useMemo(() => {
+
+      return incidents.slice(
+        0,
+        6
+      );
+
+    }, [incidents]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <RoleSwitcher
-        role="citizen"
-        setRole={onRoleChange}
-      />
+    <div className="citizen-dashboard min-h-screen bg-slate-50">
+
+      {/* CITIZEN HEADER */}
 
       <header className="border-b border-slate-200 bg-white">
+
         <div className="mx-auto max-w-6xl px-4 py-5 md:px-8">
+
           <div className="flex items-center gap-3">
+
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white shadow-sm">
               <Siren size={25} />
             </div>
 
             <div>
+
               <p className="text-xs font-black uppercase tracking-[0.18em] text-red-600">
                 SAHAY RESPONSE NETWORK
               </p>
@@ -511,17 +601,22 @@ function CitizenDashboard({ onRoleChange }) {
               <h1 className="text-2xl font-black text-slate-900">
                 Emergency Assistance
               </h1>
+
             </div>
+
           </div>
 
           <p className="mt-2 text-sm text-slate-500">
             Smart emergency response powered by AI
             and coordinated response teams.
           </p>
+
         </div>
+
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-6 md:px-8">
+
         {message && (
           <div
             className={`mb-5 rounded-xl border px-4 py-3 text-sm font-bold ${
@@ -535,9 +630,15 @@ function CitizenDashboard({ onRoleChange }) {
         )}
 
         <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+
+          {/* SOS FORM */}
+
           <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
             <div className="mb-5">
+
               <div className="flex items-center gap-2">
+
                 <AlertTriangle
                   size={20}
                   className="text-red-600"
@@ -546,19 +647,24 @@ function CitizenDashboard({ onRoleChange }) {
                 <h2 className="text-xl font-black text-slate-900">
                   Request Emergency Help
                 </h2>
+
               </div>
 
               <p className="mt-1 text-sm text-slate-500">
-                Describe what is happening. SAHAY
-                Intelligence will analyze the emergency.
+                Describe what is happening.
+                SAHAY Intelligence will analyze
+                the emergency.
               </p>
+
             </div>
 
             <form
               onSubmit={handleSOS}
               className="space-y-4"
             >
+
               <div>
+
                 <label className="mb-2 block text-xs font-black uppercase tracking-wide text-slate-500">
                   Emergency Type
                 </label>
@@ -572,18 +678,24 @@ function CitizenDashboard({ onRoleChange }) {
                   }
                   className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none focus:border-red-400"
                 >
-                  {emergencyTypes.map((type) => (
-                    <option
-                      key={type}
-                      value={type}
-                    >
-                      {type}
-                    </option>
-                  ))}
+
+                  {emergencyTypes.map(
+                    (type) => (
+                      <option
+                        key={type}
+                        value={type}
+                      >
+                        {type}
+                      </option>
+                    )
+                  )}
+
                 </select>
+
               </div>
 
               <div>
+
                 <label className="mb-2 block text-xs font-black uppercase tracking-wide text-slate-500">
                   Emergency Description
                 </label>
@@ -596,29 +708,37 @@ function CitizenDashboard({ onRoleChange }) {
                     )
                   }
                   rows={6}
-                  placeholder="Example: A person is unconscious after a road accident and has severe bleeding."
+                  placeholder="Example: A person is unconscious after a road accident and needs immediate help."
                   className="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium outline-none focus:border-red-400"
                 />
+
               </div>
 
               <button
                 type="button"
                 onClick={captureLocation}
-                disabled={locationLoading}
+                disabled={
+                  locationLoading
+                }
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 disabled:opacity-60"
               >
+
                 {locationLoading ? (
                   <RefreshCw
                     size={17}
                     className="animate-spin"
                   />
                 ) : (
-                  <LocateFixed size={17} />
+                  <LocateFixed
+                    size={17}
+                  />
                 )}
 
-                {location.latitude !== null
+                {location.latitude !==
+                null
                   ? "Location Captured"
                   : "Capture My Location"}
+
               </button>
 
               <button
@@ -626,6 +746,7 @@ function CitizenDashboard({ onRoleChange }) {
                 disabled={loading}
                 className="flex w-full items-center justify-center gap-3 rounded-xl bg-red-600 px-5 py-4 text-base font-black text-white shadow-lg shadow-red-200 transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
+
                 {loading ? (
                   <RefreshCw
                     size={20}
@@ -638,17 +759,25 @@ function CitizenDashboard({ onRoleChange }) {
                 {loading
                   ? "Analyzing Emergency..."
                   : "SEND SOS"}
+
               </button>
+
             </form>
+
           </section>
 
+          {/* LOCATION */}
+
           <section className="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-white shadow-sm">
+
             <div className="mb-5 flex items-center gap-3">
+
               <div className="rounded-xl bg-white/10 p-3">
                 <MapPin size={21} />
               </div>
 
               <div>
+
                 <h2 className="font-black">
                   Emergency Location
                 </h2>
@@ -656,13 +785,20 @@ function CitizenDashboard({ onRoleChange }) {
                 <p className="text-xs text-slate-400">
                   GPS coordinates sent with SOS
                 </p>
+
               </div>
+
             </div>
 
             <div className="flex min-h-[220px] items-center justify-center rounded-xl border border-white/10 bg-white/5">
-              {location.latitude !== null &&
-              location.longitude !== null ? (
+
+              {location.latitude !==
+                null &&
+              location.longitude !==
+                null ? (
+
                 <div className="text-center">
+
                   <MapPin
                     size={42}
                     className="mx-auto mb-3 text-red-400"
@@ -673,17 +809,25 @@ function CitizenDashboard({ onRoleChange }) {
                   </p>
 
                   <p className="mt-2 text-xs text-slate-400">
+
                     {Number(
                       location.latitude
                     ).toFixed(5)}
+
                     ,{" "}
+
                     {Number(
                       location.longitude
                     ).toFixed(5)}
+
                   </p>
+
                 </div>
+
               ) : (
+
                 <div className="text-center text-slate-400">
+
                   <LocateFixed
                     size={42}
                     className="mx-auto mb-3 opacity-50"
@@ -694,17 +838,27 @@ function CitizenDashboard({ onRoleChange }) {
                   </p>
 
                   <p className="mt-1 text-xs">
-                    Capture location before sending SOS.
+                    Capture location before
+                    sending SOS.
                   </p>
+
                 </div>
+
               )}
+
             </div>
+
           </section>
+
         </div>
+
+        {/* ACTIVE INCIDENT */}
 
         {activeIncident && (
           <section className="mt-6">
+
             <div className="mb-4 flex items-center gap-2">
+
               <Activity
                 size={20}
                 className="text-red-600"
@@ -713,12 +867,17 @@ function CitizenDashboard({ onRoleChange }) {
               <h2 className="text-xl font-black text-slate-900">
                 Active Emergency
               </h2>
+
             </div>
 
             <div className="rounded-2xl border border-red-200 bg-red-50 p-5 shadow-sm">
+
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+
                 <div>
+
                   <div className="mb-2 flex flex-wrap items-center gap-2">
+
                     <span className="rounded-lg bg-slate-900 px-3 py-1 text-xs font-black text-white">
                       INCIDENT #{activeIncident.id}
                     </span>
@@ -733,6 +892,7 @@ function CitizenDashboard({ onRoleChange }) {
                     >
                       {activeIncident.severity}
                     </span>
+
                   </div>
 
                   <p className="font-black text-slate-900">
@@ -742,9 +902,11 @@ function CitizenDashboard({ onRoleChange }) {
                   <p className="mt-1 text-sm text-slate-600">
                     {activeIncident.description}
                   </p>
+
                 </div>
 
                 <div className="rounded-xl bg-white px-4 py-3 shadow-sm">
+
                   <p className="text-[10px] font-black uppercase text-slate-400">
                     Current Status
                   </p>
@@ -755,10 +917,13 @@ function CitizenDashboard({ onRoleChange }) {
                       " "
                     )}
                   </p>
+
                 </div>
+
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+
                 <InfoCard
                   icon={<Activity size={16} />}
                   label="AI Priority"
@@ -788,10 +953,12 @@ function CitizenDashboard({ onRoleChange }) {
                     "Pending"
                   }
                 />
+
               </div>
 
               {activeIncident.ai_recommendation && (
                 <div className="mt-4 rounded-xl border border-red-100 bg-white p-4">
+
                   <p className="text-[10px] font-black uppercase tracking-wide text-red-500">
                     SAHAY AI Recommendation
                   </p>
@@ -799,23 +966,36 @@ function CitizenDashboard({ onRoleChange }) {
                   <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
                     {activeIncident.ai_recommendation}
                   </p>
+
                 </div>
               )}
+
             </div>
 
             <div className="mt-5">
+
               <EmergencyTimeline
-                timelineData={timelineData}
+                timelineData={
+                  timelineData
+                }
               />
+
             </div>
+
           </section>
         )}
 
+        {/* COMPLETED */}
+
         {!activeIncident &&
           selectedIncident &&
-          selectedIncident.status === "completed" && (
+          selectedIncident.status ===
+            "completed" && (
+
             <section className="mt-6">
+
               <div className="mb-4 flex items-center gap-2">
+
                 <CheckCircle2
                   size={20}
                   className="text-green-600"
@@ -824,12 +1004,17 @@ function CitizenDashboard({ onRoleChange }) {
                 <h2 className="text-xl font-black text-slate-900">
                   Latest Emergency
                 </h2>
+
               </div>
 
               <div className="rounded-2xl border border-green-200 bg-green-50 p-5 shadow-sm">
+
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+
                   <div>
+
                     <div className="mb-2 flex flex-wrap items-center gap-2">
+
                       <span className="rounded-lg bg-slate-900 px-3 py-1 text-xs font-black text-white">
                         INCIDENT #{selectedIncident.id}
                       </span>
@@ -837,6 +1022,7 @@ function CitizenDashboard({ onRoleChange }) {
                       <span className="rounded-lg border border-green-200 bg-green-100 px-3 py-1 text-xs font-black uppercase text-green-700">
                         COMPLETED
                       </span>
+
                     </div>
 
                     <p className="font-black text-slate-900">
@@ -847,9 +1033,11 @@ function CitizenDashboard({ onRoleChange }) {
                       {selectedIncident.description ||
                         "Emergency assistance requested."}
                     </p>
+
                   </div>
 
                   <div className="rounded-xl bg-white px-4 py-3 shadow-sm">
+
                     <p className="text-[10px] font-black uppercase text-slate-400">
                       Final Status
                     </p>
@@ -857,10 +1045,13 @@ function CitizenDashboard({ onRoleChange }) {
                     <p className="mt-1 font-black uppercase text-green-600">
                       COMPLETED
                     </p>
+
                   </div>
+
                 </div>
 
                 <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+
                   <InfoCard
                     icon={<Activity size={16} />}
                     label="AI Priority"
@@ -890,20 +1081,32 @@ function CitizenDashboard({ onRoleChange }) {
                       "Not assigned"
                     }
                   />
+
                 </div>
 
                 <div className="mt-5">
+
                   <EmergencyTimeline
-                    timelineData={timelineData}
+                    timelineData={
+                      timelineData
+                    }
                   />
+
                 </div>
+
               </div>
+
             </section>
           )}
 
+        {/* RECENT INCIDENTS */}
+
         <section className="mt-6">
+
           <div className="mb-4 flex items-center justify-between">
+
             <div>
+
               <h2 className="text-xl font-black text-slate-900">
                 Recent Incidents
               </h2>
@@ -911,97 +1114,123 @@ function CitizenDashboard({ onRoleChange }) {
               <p className="text-sm text-slate-500">
                 Latest emergency activity
               </p>
+
             </div>
 
             <button
-              onClick={fetchIncidents}
+              onClick={
+                fetchIncidents
+              }
               className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
             >
               <RefreshCw size={15} />
               Refresh
             </button>
+
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {recentIncidents.map((incident) => {
-              const isCompleted =
-                incident.status === "completed";
 
-              return (
-                <button
-                  key={incident.id}
-                  onClick={() => {
-                    setSelectedIncident(
-                      incident
-                    );
+            {recentIncidents.map(
+              (incident) => {
 
-                    if (isCompleted) {
-                      setActiveIncident(null);
-                    } else {
-                      setActiveIncident(
+                const isCompleted =
+                  incident.status ===
+                  "completed";
+
+                return (
+                  <button
+                    key={incident.id}
+                    onClick={() => {
+
+                      setSelectedIncident(
                         incident
                       );
-                    }
 
-                    fetchTimeline(
-                      incident.id
-                    );
-                  }}
-                  className="rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-red-200 hover:shadow"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-lg bg-slate-900 px-2 py-1 text-[10px] font-black text-white">
-                        #{incident.id}
-                      </span>
+                      if (
+                        isCompleted
+                      ) {
+                        setActiveIncident(
+                          null
+                        );
+                      } else {
+                        setActiveIncident(
+                          incident
+                        );
+                      }
 
-                      <span
-                        className={`rounded-lg border px-2 py-1 text-[10px] font-black uppercase ${
-                          severityStyles[
-                            incident.severity?.toLowerCase()
-                          ] ||
-                          severityStyles.medium
-                        }`}
-                      >
-                        {incident.severity}
-                      </span>
+                      fetchTimeline(
+                        incident.id
+                      );
+
+                    }}
+                    className="rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-red-200 hover:shadow"
+                  >
+
+                    <div className="flex items-center justify-between gap-3">
+
+                      <div className="flex items-center gap-2">
+
+                        <span className="rounded-lg bg-slate-900 px-2 py-1 text-[10px] font-black text-white">
+                          #{incident.id}
+                        </span>
+
+                        <span
+                          className={`rounded-lg border px-2 py-1 text-[10px] font-black uppercase ${
+                            severityStyles[
+                              incident.severity?.toLowerCase()
+                            ] ||
+                            severityStyles.medium
+                          }`}
+                        >
+                          {incident.severity}
+                        </span>
+
+                      </div>
+
+                      <ChevronRight
+                        size={17}
+                        className="text-slate-400"
+                      />
+
                     </div>
 
-                    <ChevronRight
-                      size={17}
-                      className="text-slate-400"
-                    />
-                  </div>
+                    <p className="mt-3 font-black text-slate-900">
+                      {incident.emergency_type}
+                    </p>
 
-                  <p className="mt-3 font-black text-slate-900">
-                    {incident.emergency_type}
-                  </p>
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+                      {incident.description ||
+                        "Emergency assistance requested."}
+                    </p>
 
-                  <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-                    {incident.description ||
-                      "Emergency assistance requested."}
-                  </p>
+                    <div className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase text-slate-400">
 
-                  <div className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase text-slate-400">
-                    <span>
-                      {incident.status?.replaceAll(
-                        "_",
-                        " "
-                      )}
-                    </span>
+                      <span>
+                        {incident.status?.replaceAll(
+                          "_",
+                          " "
+                        )}
+                      </span>
 
-                    <span>
-                      {formatTime(
-                        incident.created_at
-                      )}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+                      <span>
+                        {formatTime(
+                          incident.created_at
+                        )}
+                      </span>
 
-            {recentIncidents.length === 0 && (
+                    </div>
+
+                  </button>
+                );
+              }
+            )}
+
+            {recentIncidents.length ===
+              0 && (
+
               <div className="rounded-xl border border-slate-200 bg-white p-8 text-center md:col-span-2">
+
                 <CheckCircle2
                   size={32}
                   className="mx-auto mb-3 text-slate-300"
@@ -1010,72 +1239,360 @@ function CitizenDashboard({ onRoleChange }) {
                 <p className="font-bold text-slate-600">
                   No incidents yet.
                 </p>
+
               </div>
+
             )}
+
           </div>
+
         </section>
+
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-5">
+
         <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 text-xs font-semibold text-slate-400">
+
           <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
 
           SAHAY Emergency Response Network · Live
           monitoring
+
         </div>
+
       </footer>
+
     </div>
   );
 }
 
+
+/* =========================================================
+   MAIN APP / AUTHENTICATION
+   ========================================================= */
+
 export default function App() {
-  const [role, setRole] = useState("citizen");
 
-  if (role === "responder") {
+  const [
+    user,
+    setUser,
+  ] = useState(null);
+
+  const [
+    checkingSession,
+    setCheckingSession,
+  ] = useState(true);
+
+  const [
+    logoutError,
+    setLogoutError,
+  ] = useState("");
+
+  /*
+   * RESTORE SESSION
+   *
+   * Browser refresh hone ke baad React state reset hoti hai.
+   * Isliye backend /api/auth/me se user dobara load karte hain.
+   */
+
+  useEffect(() => {
+
+    let cancelled = false;
+
+    async function restoreSession() {
+
+      try {
+
+        const currentUser =
+          await apiFetch(
+            "/api/auth/me"
+          );
+
+        if (!cancelled) {
+          setUser(
+            currentUser
+          );
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Session restore failed:",
+          error
+        );
+
+        if (!cancelled) {
+          setUser(null);
+        }
+
+      } finally {
+
+        if (!cancelled) {
+          setCheckingSession(
+            false
+          );
+        }
+
+      }
+    }
+
+    restoreSession();
+
+    return () => {
+      cancelled = true;
+    };
+
+  }, []);
+
+  /*
+   * LOGOUT
+   */
+
+  async function handleLogout() {
+
+    setLogoutError("");
+
+    try {
+
+      await apiFetch(
+        "/api/auth/logout",
+        {
+          method: "POST",
+        }
+      );
+
+      setUser(null);
+
+    } catch (error) {
+
+      setLogoutError(
+        error.message ||
+          "Logout failed. Please try again."
+      );
+
+    }
+  }
+
+  /*
+   * SESSION CHECK LOADING
+   */
+
+  if (checkingSession) {
+
     return (
-      <div>
-        <RoleSwitcher
-          role={role}
-          setRole={setRole}
-        />
+      <main className="sahay-session-loading">
 
-        <ResponderDashboard />
-      </div>
+        <div className="sahay-session-card">
+
+          <div className="sahay-session-spinner" />
+
+          <p>
+            Checking your SAHAY session...
+          </p>
+
+        </div>
+
+      </main>
     );
   }
 
-  if (role === "hospital") {
-    return (
-      <div>
-        <RoleSwitcher
-          role={role}
-          setRole={setRole}
-        />
+  /*
+   * NOT LOGGED IN
+   */
 
-        <HospitalDashboard />
-      </div>
+  if (!user) {
+
+    return (
+      <AuthPage
+        onAuthenticated={
+          setUser
+        }
+      />
     );
   }
 
-  if (role === "authority") {
-    return (
-      <div>
-        <RoleSwitcher
-          role={role}
-          setRole={setRole}
-        />
+  /*
+   * BACKEND ROLE
+   *
+   * Login ke baad backend ka actual role use hoga.
+   */
 
-        <AuthorityDashboard />
-      </div>
+  const role =
+    String(
+      user.role || ""
+    ).toLowerCase();
+
+  let dashboard;
+
+  /*
+   * CITIZEN
+   */
+
+  if (role === "citizen") {
+
+    dashboard =
+      <CitizenDashboard />;
+
+  }
+
+  /*
+   * RESPONDER
+   */
+
+  else if (
+    role === "responder"
+  ) {
+
+    dashboard =
+      <ResponderDashboard />;
+
+  }
+
+  /*
+   * HOSPITAL
+   */
+
+  else if (
+    role === "hospital"
+  ) {
+
+    dashboard =
+      <HospitalDashboard />;
+
+  }
+
+  /*
+   * AUTHORITY
+   */
+
+  else if (
+    role === "authority"
+  ) {
+
+    dashboard =
+      <AuthorityDashboard />;
+
+  }
+
+  /*
+   * ADMIN
+   */
+
+  else if (role === "admin") {
+    dashboard = <AdminDashboard />;
+  }
+
+  /*
+   * UNKNOWN ROLE
+   */
+
+  else {
+
+    dashboard = (
+
+      <main className="sahay-role-error">
+
+        <section>
+
+          <h1>
+            Account role unavailable
+          </h1>
+
+          <p>
+            Your account does not have
+            a supported dashboard role.
+            Please contact the SAHAY
+            administrator.
+          </p>
+
+          <button
+            onClick={
+              handleLogout
+            }
+          >
+            Sign out
+          </button>
+
+        </section>
+
+      </main>
+
     );
   }
+
+  /*
+   * LOGGED-IN APP SHELL
+   */
 
   return (
-    <CitizenDashboard
-      onRoleChange={setRole}
-    />
+
+    <div className="sahay-app-shell">
+
+      <header className="sahay-user-bar">
+
+        <div className="sahay-user-brand">
+
+          <div className="sahay-user-logo">
+            <Siren size={20} />
+          </div>
+
+          <div>
+
+            <p>
+              SAHAY
+            </p>
+
+            <span>
+              RESPONSE NETWORK
+            </span>
+
+          </div>
+
+        </div>
+
+        <div className="sahay-user-meta">
+
+          <div className="sahay-user-details">
+
+            <strong>
+              {user.name ||
+                user.email}
+            </strong>
+
+            <span>
+              {user.email} ·{" "}
+              {role}
+            </span>
+
+          </div>
+
+          <button
+            onClick={
+              handleLogout
+            }
+            className="sahay-logout-button"
+          >
+            Sign out
+          </button>
+
+        </div>
+
+      </header>
+
+      {logoutError && (
+
+        <div
+          role="alert"
+          className="sahay-logout-error"
+        >
+          {logoutError}
+        </div>
+
+      )}
+
+      {dashboard}
+
+    </div>
   );
 }
-
-
-

@@ -1,5 +1,9 @@
+
 from app.database import Base, engine
+
+# Import every model so SQLAlchemy registers its table.
 from app.models.incident import Incident
+from app.models.user import User
 
 
 def initialize_database():

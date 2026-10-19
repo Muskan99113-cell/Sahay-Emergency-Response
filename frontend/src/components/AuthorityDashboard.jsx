@@ -14,7 +14,7 @@ import {
   Users,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
+import { API_BASE } from "../lib/api";
 
 const severityStyles = {
   critical: "bg-red-100 text-red-700 border-red-200",
@@ -120,7 +120,7 @@ export default function AuthorityDashboard() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8">
+    <div className="authority-dashboard min-h-screen bg-slate-50 px-4 py-6 md:px-8">
       <div className="mx-auto max-w-7xl">
 
         {/* HEADER */}
@@ -185,7 +185,7 @@ export default function AuthorityDashboard() {
 
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-xs font-black uppercase tracking-wide text-slate-400">
+                  <p className="text-xs font-black uppercase tracking-wide text-slate-600">
                     Active Incidents
                   </p>
 
@@ -262,7 +262,7 @@ export default function AuthorityDashboard() {
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-600">
                       Hospitals Coordinated
                     </p>
 
@@ -280,7 +280,7 @@ export default function AuthorityDashboard() {
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-600">
                       Average AI Priority
                     </p>
 
@@ -298,7 +298,7 @@ export default function AuthorityDashboard() {
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-600">
                       System Status
                     </p>
 
@@ -368,7 +368,7 @@ export default function AuthorityDashboard() {
                 <div className="relative z-10 p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-black uppercase tracking-wider text-slate-400">
+                      <p className="text-xs font-black uppercase tracking-wider text-slate-600">
                         Live Incident Map
                       </p>
 
@@ -402,11 +402,11 @@ export default function AuthorityDashboard() {
                               </span>
                             </div>
 
-                            <p className="text-xs font-bold uppercase text-slate-300">
+                            <p className="text-xs font-bold uppercase text-slate-600">
                               {incident.severity}
                             </p>
 
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-1 text-xs text-slate-600">
                               {incident.latitude &&
                               incident.longitude
                                 ? `${Number(
@@ -420,7 +420,7 @@ export default function AuthorityDashboard() {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-center text-slate-400">
+                      <div className="text-center text-slate-600">
                         <MapPin
                           size={40}
                           className="mx-auto mb-3 opacity-50"
@@ -595,7 +595,7 @@ export default function AuthorityDashboard() {
                               {severity}
                             </span>
 
-                            <span className="text-xs font-bold uppercase text-slate-400">
+                            <span className="text-xs font-bold uppercase text-slate-600">
                               {incident.emergency_type}
                             </span>
                           </div>
@@ -624,7 +624,7 @@ export default function AuthorityDashboard() {
                           </div>
 
                           <div className="rounded-xl bg-slate-50 p-3">
-                            <p className="text-[9px] font-black uppercase text-slate-400">
+                            <p className="text-[9px] font-black uppercase text-slate-600">
                               Responder
                             </p>
 
@@ -636,7 +636,7 @@ export default function AuthorityDashboard() {
                           </div>
 
                           <div className="rounded-xl bg-slate-50 p-3">
-                            <p className="text-[9px] font-black uppercase text-slate-400">
+                            <p className="text-[9px] font-black uppercase text-slate-600">
                               Hospital
                             </p>
 
@@ -648,7 +648,7 @@ export default function AuthorityDashboard() {
                           </div>
 
                           <div className="rounded-xl bg-slate-50 p-3">
-                            <p className="text-[9px] font-black uppercase text-slate-400">
+                            <p className="text-[9px] font-black uppercase text-slate-600">
                               Status
                             </p>
 
@@ -670,14 +670,11 @@ export default function AuthorityDashboard() {
         )}
 
         {/* FOOTER */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400">
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-600">
           <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-          SAHAY Command Center · Live monitoring · 5 second refresh
+          SAHAY Command Center Â· Live monitoring Â· 5 second refresh
         </div>
       </div>
     </div>
   );
 }
-
-
-

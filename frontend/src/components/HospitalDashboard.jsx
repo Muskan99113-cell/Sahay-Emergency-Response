@@ -12,7 +12,7 @@ import {
   UserRound,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.DEV ? "http://127.0.0.1:8000" : "";
+import { API_BASE } from "../lib/api";
 
 const severityStyles = {
   critical: "bg-red-100 text-red-700 border-red-200",
@@ -219,14 +219,14 @@ export default function HospitalDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8">
+    <div className="hospital-dashboard min-h-screen bg-slate-50 px-4 py-6 md:px-8">
       <div className="mx-auto max-w-7xl">
 
         {/* HEADER */}
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-pink-400 to-purple-400 text-slate-800 shadow-sm">
                 <Hospital size={23} />
               </div>
 
@@ -241,7 +241,7 @@ export default function HospitalDashboard() {
               </div>
             </div>
 
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-600">
               AI-powered emergency intake and hospital coordination
             </p>
           </div>
@@ -286,7 +286,7 @@ export default function HospitalDashboard() {
 
           <div className="rounded-2xl border border-blue-200 bg-white p-5 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-xs font-black uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-black uppercase tracking-wide text-slate-600">
                 Incoming
               </p>
 
@@ -369,7 +369,7 @@ export default function HospitalDashboard() {
                 </h2>
               </div>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-600">
                 AI identifies which emergencies require hospital coordination.
               </p>
             </div>
@@ -386,7 +386,7 @@ export default function HospitalDashboard() {
                   onClick={() => setFilter(value)}
                   className={`rounded-lg px-3 py-2 text-xs font-bold transition ${
                     filter === value
-                      ? "bg-blue-600 text-white"
+                      ? "bg-blue-600 text-slate-800"
                       : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                   }`}
                 >
@@ -423,7 +423,7 @@ export default function HospitalDashboard() {
               No emergencies in this queue
             </h3>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-600">
               Hospital-required emergencies will appear here.
             </p>
           </div>
@@ -452,7 +452,7 @@ export default function HospitalDashboard() {
                 <div className="flex flex-col gap-3 border-b border-slate-100 bg-slate-50 px-5 py-4 md:flex-row md:items-center md:justify-between">
 
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-black text-white">
+                    <span className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-black text-slate-800">
                       #{incident.id}
                     </span>
 
@@ -466,13 +466,13 @@ export default function HospitalDashboard() {
                     </span>
 
                     {incident.hospital_required && (
-                      <span className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-black text-white">
+                      <span className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-black text-slate-800">
                         HOSPITAL REQUIRED
                       </span>
                     )}
 
                     {isAccepted && (
-                      <span className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-black text-white">
+                      <span className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-black text-slate-800">
                         ACCEPTED
                       </span>
                     )}
@@ -503,20 +503,20 @@ export default function HospitalDashboard() {
                     </div>
 
                     <div className="rounded-xl bg-slate-50 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-600">
                         AI Confidence
                       </p>
 
                       <p className="mt-1 text-2xl font-black text-slate-900">
                         {incident.ai_confidence ?? "--"}
-                        <span className="text-sm text-slate-400">
+                        <span className="text-sm text-slate-600">
                           %
                         </span>
                       </p>
                     </div>
 
                     <div className="rounded-xl bg-slate-50 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-600">
                         Responder
                       </p>
 
@@ -527,7 +527,7 @@ export default function HospitalDashboard() {
                     </div>
 
                     <div className="rounded-xl bg-slate-50 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-600">
                         Hospital Status
                       </p>
 
@@ -547,10 +547,10 @@ export default function HospitalDashboard() {
                         <div className="mb-2 flex items-center gap-2">
                           <UserRound
                             size={17}
-                            className="text-slate-400"
+                            className="text-slate-600"
                           />
 
-                          <span className="text-xs font-black uppercase tracking-wide text-slate-400">
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
                             Patient / Citizen
                           </span>
                         </div>
@@ -564,10 +564,10 @@ export default function HospitalDashboard() {
                         <div className="mb-2 flex items-center gap-2">
                           <AlertTriangle
                             size={17}
-                            className="text-slate-400"
+                            className="text-slate-600"
                           />
 
-                          <span className="text-xs font-black uppercase tracking-wide text-slate-400">
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
                             Emergency
                           </span>
                         </div>
@@ -594,7 +594,7 @@ export default function HospitalDashboard() {
 
                       {incident.ai_recommendation && (
                         <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                          <p className="mb-1 text-xs font-black uppercase tracking-wide text-slate-400">
+                          <p className="mb-1 text-xs font-black uppercase tracking-wide text-slate-600">
                             AI Recommendation
                           </p>
 
@@ -615,7 +615,7 @@ export default function HospitalDashboard() {
                             className="text-red-500"
                           />
 
-                          <span className="text-xs font-black uppercase tracking-wide text-slate-400">
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
                             Emergency Location
                           </span>
                         </div>
@@ -639,7 +639,7 @@ export default function HospitalDashboard() {
                             className="text-blue-600"
                           />
 
-                          <span className="text-xs font-black uppercase tracking-wide text-slate-400">
+                          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
                             Facility
                           </span>
                         </div>
@@ -664,7 +664,7 @@ export default function HospitalDashboard() {
                         onClick={() =>
                           acceptIncident(incident.id)
                         }
-                        className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-black text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-black text-slate-800 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         <Hospital size={18} />
 
@@ -685,7 +685,7 @@ export default function HospitalDashboard() {
                               "preparing"
                             )
                           }
-                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-black text-white transition hover:bg-slate-800 disabled:opacity-50"
+                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-black text-slate-800 transition hover:bg-slate-800 disabled:opacity-50"
                         >
                           <Activity size={18} />
                           Start Preparing
@@ -703,7 +703,7 @@ export default function HospitalDashboard() {
                               "ready"
                             )
                           }
-                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-black text-white transition hover:bg-green-700 disabled:opacity-50"
+                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-black text-slate-800 transition hover:bg-green-700 disabled:opacity-50"
                         >
                           <CheckCircle2 size={18} />
                           Mark Ready
@@ -735,14 +735,11 @@ export default function HospitalDashboard() {
           })}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400">
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-600">
           <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-          Live hospital queue · updates every 5 seconds
+          Live hospital queue Â· updates every 5 seconds
         </div>
       </div>
     </div>
   );
 }
-
-
-

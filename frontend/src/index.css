@@ -1,16 +1,28 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
+  font-family: Inter, "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  color: #29354b;
+  background: #fffaf8;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --sahay-pink: #e88fa8;
+  --sahay-pink-dark: #c45e7a;
+  --sahay-pink-light: #fff0f4;
+  --sahay-lilac: #f0ebff;
+  --sahay-mint: #e3f6ed;
+  --sahay-peach: #fff0e5;
+  --sahay-text: #29354b;
+  --sahay-muted: #7e899b;
+  --sahay-border: #f0e5e7;
+  --sahay-shadow: 0 10px 30px rgba(95, 68, 83, 0.07);
 }
 
 * {
@@ -24,7 +36,1626 @@ body,
   margin: 0;
 }
 
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
 body {
   min-width: 320px;
-  background: #f8fafc;
+  background:
+    radial-gradient(
+      circle at 5% 0%,
+      rgba(255, 218, 229, 0.42),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 100% 10%,
+      rgba(226, 218, 255, 0.35),
+      transparent 28rem
+    ),
+    #fffaf8;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input,
+select,
+textarea {
+  max-width: 100%;
+  border: 1px solid var(--sahay-border);
+  border-radius: 14px;
+  background: #fffdfc;
+  color: var(--sahay-text);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--sahay-pink);
+  box-shadow: 0 0 0 4px rgba(232, 143, 168, 0.13);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a5a0aa;
+}
+
+a {
+  color: var(--sahay-pink-dark);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #a84465;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::selection {
+  background: #f8d0dc;
+  color: #29354b;
+}
+
+/* Reusable SAHAY cards */
+.sahay-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--sahay-border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--sahay-shadow);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sahay-card:hover {
+  box-shadow: 0 14px 36px rgba(95, 68, 83, 0.1);
+}
+
+.sahay-page-title {
+  color: var(--sahay-text);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+.sahay-muted {
+  color: var(--sahay-muted);
+}
+
+.sahay-soft-pink {
+  background: var(--sahay-pink-light);
+}
+
+.sahay-soft-lilac {
+  background: var(--sahay-lilac);
+}
+
+.sahay-soft-mint {
+  background: var(--sahay-mint);
+}
+
+.sahay-soft-peach {
+  background: var(--sahay-peach);
+}
+
+.sahay-primary-button {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  background: var(--sahay-pink);
+  color: white;
+  font-weight: 650;
+  box-shadow: 0 6px 16px rgba(232, 143, 168, 0.2);
+}
+
+.sahay-primary-button:hover {
+  background: #df7e9b;
+  box-shadow: 0 8px 20px rgba(232, 143, 168, 0.28);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(232, 143, 168, 0.5);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .sahay-card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* SAHAY Login / Register */
+.sahay-auth-page {
+  --auth-ink: #27334a;
+  --auth-muted: #78849a;
+  --auth-pink: #e87891;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 36px 22px;
+  background: linear-gradient(135deg, #fff8f8 0%, #f4f5ff 52%, #effaf8 100%);
+  color: var(--auth-ink);
+}
+
+.sahay-auth-decoration {
+  position: absolute;
+  z-index: -1;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.sahay-auth-decoration-one {
+  top: -180px;
+  left: -100px;
+  background: #f9dce5;
+  opacity: 0.65;
+}
+
+.sahay-auth-decoration-two {
+  right: -150px;
+  bottom: -200px;
+  background: #d6eee9;
+  opacity: 0.8;
+}
+
+.sahay-auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 0.92fr;
+  width: min(100%, 1000px);
+  min-height: 620px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 28px 80px rgba(69, 75, 115, 0.13);
+  backdrop-filter: blur(16px);
+}
+
+.sahay-auth-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 42px;
+  background: linear-gradient(145deg, #fff0f2, #f2efff 58%, #e8f8f4);
+}
+
+.sahay-auth-brand,
+.sahay-auth-mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sahay-auth-logo {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 18px;
+  background: #e87891;
+  color: white;
+  box-shadow: 0 9px 20px #e878913b;
+}
+
+.sahay-auth-brand-name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.sahay-auth-brand-caption {
+  margin: 2px 0 0;
+  color: #7c8296;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.sahay-auth-hero {
+  position: relative;
+  z-index: 1;
+  margin: 45px 0;
+}
+
+.sahay-auth-eyebrow,
+.sahay-auth-small-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #c75e7b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+}
+
+.sahay-auth-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6cb7a3;
+  box-shadow: 0 0 0 4px #6cb7a31c;
+}
+
+.sahay-auth-hero h1 {
+  margin: 20px 0 16px;
+  font-size: clamp(36px, 4vw, 49px);
+  font-weight: 900;
+  line-height: 1.13;
+  letter-spacing: -1.8px;
+}
+
+.sahay-auth-hero h1 span {
+  color: #d96f8b;
+}
+
+.sahay-auth-hero > p {
+  max-width: 330px;
+  color: #737e94;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.sahay-auth-trust {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px;
+  border: 1px solid #ffffffb8;
+  border-radius: 18px;
+  background: #ffffff9c;
+}
+
+.sahay-auth-trust-icon {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 14px;
+  background: #e3f4ed;
+  color: #458e7b;
+}
+
+.sahay-auth-trust strong {
+  font-size: 13px;
+}
+
+.sahay-auth-trust p {
+  margin: 4px 0 0;
+  color: var(--auth-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.sahay-auth-orbit {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border: 1px solid #e4a5b640;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sahay-auth-orbit-one {
+  top: 28%;
+  right: -110px;
+}
+
+.sahay-auth-orbit-two {
+  top: calc(28% + 22px);
+  right: -88px;
+  width: 136px;
+  height: 136px;
+}
+
+.sahay-auth-cross {
+  position: absolute;
+  color: #d98aa0;
+  font-size: 27px;
+  font-weight: 300;
+}
+
+.sahay-auth-cross-one {
+  top: 24%;
+  right: 55px;
+}
+
+.sahay-auth-cross-two {
+  right: 35px;
+  bottom: 27%;
+  color: #8bbdb0;
+}
+
+.sahay-auth-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 44px;
+}
+
+.sahay-auth-form-heading {
+  margin-bottom: 27px;
+}
+
+.sahay-auth-form-heading h2 {
+  margin: 12px 0 8px;
+  color: #29344b;
+  font-size: clamp(26px, 3vw, 32px);
+  font-weight: 850;
+  letter-spacing: -1px;
+}
+
+.sahay-auth-form-heading > p {
+  margin: 0;
+  color: var(--auth-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.sahay-auth-mobile-logo {
+  display: none;
+}
+
+.sahay-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.sahay-auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sahay-auth-field > label {
+  color: #46516a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.sahay-auth-input,
+.sahay-auth-input-wrap {
+  width: 100%;
+  min-height: 49px;
+  border: 1px solid #e5e7f0;
+  border-radius: 13px;
+  background: #fbfbfe;
+  color: #344057;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.sahay-auth-input {
+  padding: 0 14px;
+  outline: none;
+}
+
+.sahay-auth-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 14px;
+  color: #a1a9bb;
+}
+
+.sahay-auth-input-wrap:focus-within,
+.sahay-auth-input:focus {
+  border-color: #e87891;
+  background: white;
+  box-shadow: 0 0 0 4px #e878911c;
+}
+
+.sahay-auth-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #344057;
+  font: inherit;
+  font-size: 13px;
+}
+
+.sahay-auth-input-wrap input::placeholder {
+  color: #a8afbe;
+}
+
+.sahay-auth-hint {
+  margin: 0;
+  color: var(--auth-muted);
+  font-size: 11px;
+}
+
+.sahay-auth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 51px;
+  margin-top: 5px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(110deg, #e87891, #d96886);
+  color: white;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 9px 20px #e878912b;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.sahay-auth-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 13px 24px #e8789138;
+}
+
+.sahay-auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+  transform: none;
+}
+
+.sahay-auth-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: -10px 0 18px;
+  padding: 12px;
+  border: 1px solid #f3cbd3;
+  border-radius: 12px;
+  background: #fff2f4;
+  color: #a83e59;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.sahay-auth-error > span {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 50%;
+  background: #f5d4dc;
+  font-weight: 900;
+}
+
+.sahay-auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 25px;
+  color: var(--auth-muted);
+  font-size: 12px;
+}
+
+.sahay-auth-switch button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #d96886;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.sahay-auth-switch button:hover {
+  text-decoration: underline;
+}
+
+.sahay-auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 29px;
+  padding-top: 18px;
+  border-top: 1px solid #f0f0f6;
+  color: #929bad;
+  font-size: 10px;
+}
+
+@media (max-width: 760px) {
+  .sahay-auth-page {
+    padding: 18px 12px;
+  }
+
+  .sahay-auth-layout {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+    min-height: auto;
+    border-radius: 24px;
+  }
+
+  .sahay-auth-intro {
+    min-height: 205px;
+    padding: 24px;
+  }
+
+  .sahay-auth-logo {
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+  }
+
+  .sahay-auth-hero {
+    margin: 28px 0 0;
+  }
+
+  .sahay-auth-hero h1 {
+    margin: 12px 0 8px;
+    font-size: 30px;
+    letter-spacing: -1px;
+  }
+
+  .sahay-auth-hero > p {
+    max-width: 290px;
+    margin-bottom: 0;
+    font-size: 12px;
+  }
+
+  .sahay-auth-trust,
+  .sahay-auth-orbit,
+  .sahay-auth-cross {
+    display: none;
+  }
+
+  .sahay-auth-form-panel {
+    padding: 28px 24px;
+  }
+
+  .sahay-auth-form-heading {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 380px) {
+  .sahay-auth-form-panel {
+    padding: 25px 18px;
+  }
+
+  .sahay-auth-hero h1 {
+    font-size: 27px;
+  }
+}
+
+.sahay-auth-field select,
+.sahay-auth-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 49px;
+  padding: 0 42px 0 15px;
+  border: 1px solid #eadde9;
+  border-radius: 14px;
+  background-color: #fffafd;
+  color: #4b4560;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sahay-auth-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23d87594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.sahay-auth-field select:focus,
+.sahay-auth-input:focus {
+  border-color: #df8ba8;
+  box-shadow: 0 0 0 4px #f9e5ed;
+}
+
+.sahay-auth-field select option {
+  padding: 12px;
+  background: #fffafd;
+  color: #4b4560;
+  font-weight: 600;
+}
+
+.sahay-auth-field select option:checked {
+  background: #f8e2ec;
+  color: #a84e72;
+}
+/* =========================================================
+   SAHAY — GLOBAL CHERRY MINT DASHBOARD THEME
+   ========================================================= */
+
+:root {
+  --sahay-cherry: #e87891;
+  --sahay-cherry-dark: #c85f79;
+  --sahay-cherry-soft: #fff0f4;
+
+  --sahay-mint: #dff5eb;
+  --sahay-mint-dark: #4d967f;
+  --sahay-mint-soft: #effaf5;
+
+  --sahay-lilac: #eee9ff;
+  --sahay-peach: #fff0e6;
+
+  --sahay-ink: #3c4254;
+  --sahay-muted: #7b8496;
+
+  --sahay-card: rgba(255, 255, 255, 0.96);
+  --sahay-border: #eadfe5;
+
+  --sahay-shadow:
+    0 12px 35px rgba(111, 77, 94, 0.08);
+}
+
+
+/* =========================================================
+   GLOBAL PAGE
+   ========================================================= */
+
+body {
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(255, 211, 224, 0.45),
+      transparent 32rem
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(204, 241, 226, 0.42),
+      transparent 30rem
+    ),
+    linear-gradient(
+      135deg,
+      #fff9fa 0%,
+      #f8f6ff 50%,
+      #f2fbf7 100%
+    );
+}
+
+
+/* =========================================================
+   LOGGED-IN APP HEADER
+   ========================================================= */
+
+.sahay-user-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 12px 24px;
+
+  border-bottom: 1px solid #eadfe5;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 246, 248, 0.97),
+      rgba(244, 251, 248, 0.97)
+    );
+
+  box-shadow:
+    0 4px 22px rgba(91, 65, 79, 0.07);
+
+  backdrop-filter: blur(16px);
+}
+
+
+.sahay-user-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+
+.sahay-user-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 14px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--sahay-cherry),
+      #d96d89
+    );
+
+  box-shadow:
+    0 7px 18px rgba(232, 120, 145, 0.24);
+}
+
+
+.sahay-user-brand p {
+  margin: 0;
+
+  color: #34394b;
+
+  font-size: 17px;
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+
+.sahay-user-brand span {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #8b8491;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 1.8px;
+}
+
+
+.sahay-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+
+.sahay-user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+.sahay-user-details strong {
+  color: #42475a;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+
+.sahay-user-details span {
+  margin-top: 2px;
+
+  color: #8a91a0;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  text-transform: capitalize;
+}
+
+
+.sahay-logout-button {
+  border: 1px solid #e7dce2;
+
+  border-radius: 12px;
+
+  padding: 9px 15px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  color: #6d6470;
+
+  font-size: 11px;
+  font-weight: 850;
+}
+
+
+.sahay-logout-button:hover {
+  border-color: #e4b4c2;
+
+  background: #fff2f5;
+
+  color: #b65370;
+
+  box-shadow:
+    0 5px 14px rgba(232, 120, 145, 0.12);
+}
+
+
+.sahay-logout-error {
+  padding: 11px 20px;
+
+  border-bottom: 1px solid #f1cdd7;
+
+  background: #fff1f4;
+
+  color: #aa4661;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   SESSION LOADING
+   ========================================================= */
+
+.sahay-session-loading {
+  display: flex;
+
+  min-height: 100vh;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      #ffe1e9,
+      transparent 25rem
+    ),
+    radial-gradient(
+      circle at 85% 85%,
+      #dff5eb,
+      transparent 25rem
+    ),
+    #fffafa;
+}
+
+
+.sahay-session-card {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  padding: 35px;
+
+  border: 1px solid #eadfe5;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 18px 55px rgba(91, 65, 79, 0.1);
+}
+
+
+.sahay-session-card p {
+  margin: 14px 0 0;
+
+  color: #6f7687;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+.sahay-session-spinner {
+  width: 38px;
+  height: 38px;
+
+  border: 4px solid #f3dce4;
+
+  border-top-color: var(--sahay-cherry);
+
+  border-right-color: var(--sahay-mint-dark);
+
+  border-radius: 50%;
+
+  animation: sahay-spin 0.8s linear infinite;
+}
+
+
+@keyframes sahay-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   ROLE ERROR
+   ========================================================= */
+
+.sahay-role-error {
+  display: flex;
+
+  min-height: 70vh;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff5f7,
+      #f3fbf7
+    );
+}
+
+
+.sahay-role-error section {
+  width: min(100%, 480px);
+
+  padding: 32px;
+
+  border: 1px solid #eadfe5;
+
+  border-radius: 24px;
+
+  background: white;
+
+  box-shadow: var(--sahay-shadow);
+
+  text-align: center;
+}
+
+
+.sahay-role-error h1 {
+  margin: 0;
+
+  color: #3f4353;
+
+  font-size: 22px;
+  font-weight: 900;
+}
+
+
+.sahay-role-error p {
+  margin: 10px 0 0;
+
+  color: #7c8493;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+.sahay-role-error button {
+  margin-top: 20px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  padding: 11px 18px;
+
+  background: var(--sahay-cherry);
+
+  color: white;
+
+  font-size: 12px;
+  font-weight: 850;
+}
+
+
+/* =========================================================
+   COMMON DASHBOARD BACKGROUNDS
+   ========================================================= */
+
+.citizen-dashboard,
+.responder-dashboard,
+.hospital-dashboard,
+.authority-dashboard {
+  color: var(--sahay-ink);
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(255, 216, 227, 0.30),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 100% 15%,
+      rgba(211, 242, 229, 0.30),
+      transparent 30rem
+    ),
+    #fffaf9 !important;
+}
+
+
+/* =========================================================
+   WHITE CARDS → SOFT WHITE / CHERRY-MINT
+   ========================================================= */
+
+.citizen-dashboard .bg-white,
+.responder-dashboard .bg-white,
+.hospital-dashboard .bg-white,
+.authority-dashboard .bg-white {
+  background:
+    rgba(255, 255, 255, 0.94) !important;
+
+  border-color:
+    #eadfe5 !important;
+
+  box-shadow:
+    0 8px 28px rgba(106, 76, 91, 0.055);
+}
+
+
+/* =========================================================
+   SLATE BACKGROUNDS → CHERRY / MINT
+   ========================================================= */
+
+.citizen-dashboard .bg-slate-50,
+.responder-dashboard .bg-slate-50,
+.hospital-dashboard .bg-slate-50,
+.authority-dashboard .bg-slate-50 {
+  background-color:
+    #fff7f8 !important;
+}
+
+
+.citizen-dashboard .bg-slate-100,
+.responder-dashboard .bg-slate-100,
+.hospital-dashboard .bg-slate-100,
+.authority-dashboard .bg-slate-100 {
+  background-color:
+    #f8eef2 !important;
+}
+
+
+.citizen-dashboard .bg-slate-900,
+.responder-dashboard .bg-slate-900,
+.hospital-dashboard .bg-slate-900,
+.authority-dashboard .bg-slate-900 {
+  background:
+    linear-gradient(
+      135deg,
+      #67556a,
+      #526e67
+    ) !important;
+}
+
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.citizen-dashboard .text-slate-900,
+.responder-dashboard .text-slate-900,
+.hospital-dashboard .text-slate-900,
+.authority-dashboard .text-slate-900 {
+  color:
+    #3f4353 !important;
+}
+
+
+.citizen-dashboard .text-slate-800,
+.responder-dashboard .text-slate-800,
+.hospital-dashboard .text-slate-800,
+.authority-dashboard .text-slate-800 {
+  color:
+    #505667 !important;
+}
+
+
+.citizen-dashboard .text-slate-700,
+.responder-dashboard .text-slate-700,
+.hospital-dashboard .text-slate-700,
+.authority-dashboard .text-slate-700 {
+  color:
+    #5d6575 !important;
+}
+
+
+.citizen-dashboard .text-slate-600,
+.responder-dashboard .text-slate-600,
+.hospital-dashboard .text-slate-600,
+.authority-dashboard .text-slate-600 {
+  color:
+    #707989 !important;
+}
+
+
+.citizen-dashboard .text-slate-500,
+.responder-dashboard .text-slate-500,
+.hospital-dashboard .text-slate-500,
+.authority-dashboard .text-slate-500 {
+  color:
+    #858d9c !important;
+}
+
+
+.citizen-dashboard .text-slate-400,
+.responder-dashboard .text-slate-400,
+.hospital-dashboard .text-slate-400,
+.authority-dashboard .text-slate-400 {
+  color:
+    #9b9aa6 !important;
+}
+
+
+/* =========================================================
+   BORDERS
+   ========================================================= */
+
+.citizen-dashboard .border-slate-200,
+.responder-dashboard .border-slate-200,
+.hospital-dashboard .border-slate-200,
+.authority-dashboard .border-slate-200 {
+  border-color:
+    #eadfe5 !important;
+}
+
+
+.citizen-dashboard .border-slate-100,
+.responder-dashboard .border-slate-100,
+.hospital-dashboard .border-slate-100,
+.authority-dashboard .border-slate-100 {
+  border-color:
+    #f1e8eb !important;
+}
+
+
+.citizen-dashboard .border-slate-300,
+.responder-dashboard .border-slate-300,
+.hospital-dashboard .border-slate-300,
+.authority-dashboard .border-slate-300 {
+  border-color:
+    #decfd7 !important;
+}
+
+
+/* =========================================================
+   COMMON BUTTONS
+   ========================================================= */
+
+.responder-dashboard .bg-slate-900,
+.hospital-dashboard .bg-slate-900,
+.authority-dashboard .bg-slate-900 {
+  color: white !important;
+}
+
+
+.responder-dashboard button:hover,
+.hospital-dashboard button:hover,
+.authority-dashboard button:hover {
+  border-color:
+    #dfb9c6;
+}
+
+
+/* =========================================================
+   SOFT MINT AREAS
+   ========================================================= */
+
+.citizen-dashboard .bg-green-50,
+.responder-dashboard .bg-green-50,
+.hospital-dashboard .bg-green-50,
+.authority-dashboard .bg-green-50 {
+  background-color:
+    #eaf8f1 !important;
+}
+
+
+.citizen-dashboard .bg-green-100,
+.responder-dashboard .bg-green-100,
+.hospital-dashboard .bg-green-100,
+.authority-dashboard .bg-green-100 {
+  background-color:
+    #dff5eb !important;
+}
+
+
+/* =========================================================
+   CHERRY AREAS
+   ========================================================= */
+
+.citizen-dashboard .bg-red-50,
+.responder-dashboard .bg-red-50,
+.hospital-dashboard .bg-red-50,
+.authority-dashboard .bg-red-50 {
+  background-color:
+    #fff0f4 !important;
+}
+
+
+.citizen-dashboard .bg-red-100,
+.responder-dashboard .bg-red-100,
+.hospital-dashboard .bg-red-100,
+.authority-dashboard .bg-red-100 {
+  background-color:
+    #ffe4eb !important;
+}
+
+
+/* =========================================================
+   MAIN SAHAY HEADERS
+   ========================================================= */
+
+.citizen-dashboard header {
+  background:
+    linear-gradient(
+      90deg,
+      #fff8fa,
+      #f2faf6
+    ) !important;
+
+  border-color:
+    #eadfe5 !important;
+}
+
+
+.citizen-dashboard header .bg-red-600 {
+  background:
+    linear-gradient(
+      135deg,
+      #e87891,
+      #c96882
+    ) !important;
+
+  box-shadow:
+    0 8px 20px rgba(232, 120, 145, 0.2);
+}
+
+
+.citizen-dashboard header .text-red-600 {
+  color:
+    #c65f79 !important;
+}
+
+
+/* =========================================================
+   HOSPITAL / RESPONDER / AUTHORITY HEADER AREAS
+   ========================================================= */
+
+.responder-dashboard .bg-gradient-to-r,
+.authority-dashboard .bg-gradient-to-r {
+  background:
+    linear-gradient(
+      110deg,
+      #fff0f4 0%,
+      #f1edff 48%,
+      #e4f7ef 100%
+    ) !important;
+}
+
+
+.hospital-dashboard .bg-slate-950 {
+  background:
+    linear-gradient(
+      135deg,
+      #67556a,
+      #4e7167
+    ) !important;
+}
+
+
+/* =========================================================
+   DARK MAP / LIVE AREAS
+   ========================================================= */
+
+.authority-dashboard .bg-slate-900 {
+  background:
+    linear-gradient(
+      145deg,
+      #62536a,
+      #3f5f58
+    ) !important;
+}
+
+
+.authority-dashboard .bg-slate-950 {
+  background:
+    linear-gradient(
+      145deg,
+      #5c5064,
+      #45645c
+    ) !important;
+}
+
+
+/* =========================================================
+   CHERRY PRIMARY ACTIONS
+   ========================================================= */
+
+.citizen-dashboard .bg-red-600,
+.responder-dashboard .bg-red-600,
+.hospital-dashboard .bg-red-600,
+.authority-dashboard .bg-red-600 {
+  background:
+    linear-gradient(
+      110deg,
+      #e87891,
+      #d46885
+    ) !important;
+}
+
+
+.citizen-dashboard .hover\:bg-red-700:hover,
+.responder-dashboard .hover\:bg-red-700:hover,
+.hospital-dashboard .hover\:bg-red-700:hover,
+.authority-dashboard .hover\:bg-red-700:hover {
+  background:
+    #c85f79 !important;
+}
+
+
+/* =========================================================
+   FORM CONTROLS
+   ========================================================= */
+
+.citizen-dashboard input,
+.citizen-dashboard select,
+.citizen-dashboard textarea,
+.responder-dashboard input,
+.responder-dashboard select,
+.responder-dashboard textarea,
+.hospital-dashboard input,
+.hospital-dashboard select,
+.hospital-dashboard textarea,
+.authority-dashboard input,
+.authority-dashboard select,
+.authority-dashboard textarea {
+  border-color:
+    #eadfe5 !important;
+
+  background:
+    #fffdfd !important;
+
+  color:
+    #4d5364 !important;
+}
+
+
+.citizen-dashboard input:focus,
+.citizen-dashboard select:focus,
+.citizen-dashboard textarea:focus,
+.responder-dashboard input:focus,
+.responder-dashboard select:focus,
+.responder-dashboard textarea:focus,
+.hospital-dashboard input:focus,
+.hospital-dashboard select:focus,
+.hospital-dashboard textarea:focus,
+.authority-dashboard input:focus,
+.authority-dashboard select:focus,
+.authority-dashboard textarea:focus {
+  border-color:
+    #e29aae !important;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(232, 120, 145, 0.12) !important;
+}
+
+
+/* =========================================================
+   AUTH PAGE MODE TABS
+   ========================================================= */
+
+.sahay-auth-mode-tabs {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 5px;
+
+  margin-bottom: 20px;
+
+  padding: 5px;
+
+  border:
+    1px solid #eadfe5;
+
+  border-radius:
+    15px;
+
+  background:
+    #f8f1f4;
+}
+
+
+.sahay-auth-mode-tabs button {
+  min-height: 40px;
+
+  border: 0;
+
+  border-radius: 11px;
+
+  background:
+    transparent;
+
+  color:
+    #8b8290;
+
+  font-size: 12px;
+
+  font-weight: 850;
+}
+
+
+.sahay-auth-mode-tabs button.active {
+  background:
+    white;
+
+  color:
+    #c65f79;
+
+  box-shadow:
+    0 4px 12px
+    rgba(96, 70, 84, 0.08);
+}
+
+
+/* =========================================================
+   AUTH PAGE CHERRY + MINT POLISH
+   ========================================================= */
+
+.sahay-auth-page {
+  background:
+    radial-gradient(
+      circle at 5% 5%,
+      rgba(255, 207, 222, 0.58),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 95% 90%,
+      rgba(197, 239, 222, 0.58),
+      transparent 30rem
+    ),
+    linear-gradient(
+      135deg,
+      #fff7f8,
+      #f6f3ff 52%,
+      #effaf6
+    );
+}
+
+
+.sahay-auth-intro {
+  background:
+    linear-gradient(
+      145deg,
+      #ffeef3,
+      #f1edff 54%,
+      #e3f7ee
+    );
+}
+
+
+.sahay-auth-logo {
+  background:
+    linear-gradient(
+      135deg,
+      #e87891,
+      #cc6882
+    );
+}
+
+
+.sahay-auth-trust-icon {
+  background:
+    #dff5eb;
+
+  color:
+    #4d967f;
+}
+
+
+.sahay-auth-live-dot {
+  background:
+    #63ad95;
+}
+
+
+.sahay-auth-submit {
+  background:
+    linear-gradient(
+      110deg,
+      #e87891,
+      #d26884
+    );
+}
+
+
+.sahay-auth-submit:hover {
+  background:
+    linear-gradient(
+      110deg,
+      #df6e89,
+      #c85f79
+    );
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .sahay-user-bar {
+    padding:
+      10px 14px;
+  }
+
+  .sahay-user-details {
+    display: none;
+  }
+
+  .sahay-user-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sahay-user-brand p {
+    font-size: 15px;
+  }
+
+  .sahay-user-brand span {
+    font-size: 7px;
+  }
+
+  .sahay-logout-button {
+    padding:
+      8px 12px;
+  }
+
 }

@@ -8,3 +8,4 @@ psycopg[binary]==3.2.10
 PyJWT
 
 pwdlib[argon2]
+email-validator

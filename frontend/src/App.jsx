@@ -413,19 +413,20 @@ function CitizenDashboard() {
   }
 
   async function captureLocation() {
-
     setLocationLoading(true);
 
-    const currentLocation =
-      await getCurrentLocation();
-
-    setLocation(
-      currentLocation
-    );
-
-    setLocationLoading(false);
-
-    return currentLocation;
+    try {
+      const currentLocation = await getCurrentLocation();
+      setLocation(currentLocation);
+      return currentLocation;
+    } catch (error) {
+      console.error("Location capture failed:", error);
+      const unavailable = { latitude: null, longitude: null };
+      setLocation(unavailable);
+      return unavailable;
+    } finally {
+      setLocationLoading(false);
+    }
   }
 
   async function handleSOS(event) {
@@ -1596,3 +1597,4 @@ export default function App() {
     </div>
   );
 }
+
